@@ -8,14 +8,26 @@
 import SwiftUI
 
 struct ContentView: View {
+    //Project9_part3 やっていきやしょう(๑>◡<๑)
+    //３つの円をスライダーを使って描画していきます
+    
+    @State private var amount = 0.0
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        VStack {//最後に画像にブラーをかけてみます
+            Image("orizuru")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 200,height: 200)
+                .saturation(amount)
+                .blur(radius: (1 - amount) * 20)
+            
+            Slider(value: $amount)
+                .padding(.horizontal)
         }
-        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.black)
+        .ignoresSafeArea()
     }
 }
 
