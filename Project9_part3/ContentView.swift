@@ -7,27 +7,41 @@
 
 import SwiftUI
 
+struct Trapezoid: Shape {
+    var insetAmount: Double
+    
+    var animatableData: Double {
+        get { insetAmount }
+        set { insetAmount = newValue }//滑らかになったかな？
+    }
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        
+        path.move(to: CGPoint(x: 0, y: rect.maxY))
+        path.addLine(to: CGPoint(x: insetAmount, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX - insetAmount, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: 0, y: rect.maxY))
+        
+        return path
+    }
+}
+
 struct ContentView: View {
     //Project9_part3 やっていきやしょう(๑>◡<๑)
-    //３つの円をスライダーを使って描画していきます
-    
-    @State private var amount = 0.0
+    //カスタム形状(台形)を作っていきます
+    //表示させていきます
+    @State private var insetAmount = 50.0
     
     var body: some View {
-        VStack {//最後に画像にブラーをかけてみます
-            Image("orizuru")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 200,height: 200)
-                .saturation(amount)
-                .blur(radius: (1 - amount) * 20)
-            
-            Slider(value: $amount)
-                .padding(.horizontal)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.black)
-        .ignoresSafeArea()
+        Trapezoid(insetAmount: insetAmount)
+            .frame(width: 200, height: 100)
+            .onTapGesture {
+                withAnimation{//アニメーションが効いていない？？
+                    insetAmount = Double.random(in: 10...90)
+                }
+            }
     }
 }
 
